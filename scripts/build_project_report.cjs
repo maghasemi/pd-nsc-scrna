@@ -53,7 +53,7 @@ const document = new Document({ creator: 'maghasemi', title: 'Parkinson Disease 
         pageBreak(), heading('Decision record'),
         paragraph('The current scope covers statistical single-cell analysis. Repository prose, code identifiers, figure text, and reports use English. Technical instruction is maintained in the project conversation. Concise comments explain intent where needed.'),
         paragraph('Donor is the biological replicate. NSC1a remains a candidate focus until annotation and donor coverage are verified. The differential expression method remains provisional until the count matrix and statistical design have been audited.'),
-        paragraph('The initial local project name is pd-neural-single-cell. The remote repository name and visibility are pending owner selection. Downloaded reference PDFs remain local; their citations, source URLs, and checksums are versioned.'),
+        paragraph('The project repository is pd-nsc-scrna. The owner selected a private repository for development and review before a future public release. Downloaded reference PDFs remain local; their citations, source URLs, and checksums are versioned.'),
         ...section('First review gate'), heading('References'),
         paragraph('[1] Schmidt S, Luecken MD, Trumbach D, et al. Primary cilia and SHH signaling impairments in human and mouse models of Parkinson\'s disease. Nature Communications. 2022;13:4819. doi.org/10.1038/s41467-022-32229-9'),
         paragraph('[2] NCBI Gene Expression Omnibus. GSE176160. www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE176160'),

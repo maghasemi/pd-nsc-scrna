@@ -1,4 +1,6 @@
-# Parkinson's Disease Neural Single-Cell Analysis
+# pd-nsc-scrna
+
+Parkinson's disease neural stem and precursor cell single-cell RNA-seq analysis.
 
 ![Analysis workflow](assets/readme/analysis_workflow.svg)
 

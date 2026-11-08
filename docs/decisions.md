@@ -10,3 +10,5 @@
 | D006 | 2026-11-08 | Consider NSC1a as the primary state | Published biological context provides a prespecified candidate; coverage must support inference | Provisional |
 | D007 | 2026-11-08 | Use donor-by-state counts and edgeR for primary DE | Obtain replicate-aware expression contrasts | Provisional |
 | D008 | 2026-11-08 | Keep downloaded papers locally and track their bibliography | Preserve access and attribution while keeping repository history compact | Accepted |
+| D009 | 2026-11-08 | Name the repository pd-nsc-scrna and keep it private during development | Owner selection | Accepted |
+| D010 | 2026-11-08 | Use the SSD workspace as the active project location | Follow the current project workspace and preserve the initial Git history | Accepted |

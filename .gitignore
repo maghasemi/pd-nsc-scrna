@@ -20,3 +20,6 @@ references/papers/*
 references/supplementary/*
 !references/supplementary/.gitkeep
 docs/.render/
+
+# macOS metadata on external volumes
+._*
