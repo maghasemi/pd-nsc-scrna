@@ -33,6 +33,24 @@ const table = new Table({ width: { size: 9000, type: WidthType.DXA }, columnWidt
         })),
     })),
 });
+const auditPath = path.join(projectRoot, 'results/tables/input_audit.json');
+const auditPages = [];
+if (fs.existsSync(auditPath)) {
+    const audit = JSON.parse(fs.readFileSync(auditPath, 'utf8'));
+    auditPages.push(
+        pageBreak(), heading('Input data audit'),
+        paragraph('GSE176160 patient input | Audit completed on 8 November 2026'),
+        paragraph(`The input contains ${audit.shape.n_cells.toLocaleString('en-US')} cells and ${audit.shape.n_genes.toLocaleString('en-US')} genes from ${audit.n_donors} donors, comprising 7 Parkinson and 5 control donors across ${audit.n_lanes} libraries.`),
+        heading('Matrix and identifiers'),
+        paragraph(`The main matrix is dense ${audit.matrix_dtype}. All entries are finite, nonnegative, and integer-valued, with values from ${audit.matrix_min} to ${audit.matrix_max}. This is compatible with raw counts. Approximately ${(audit.zero_fraction * 100).toFixed(2)} percent of entries are zero. Cell and gene identifiers are unique.`),
+        paragraph(`Median counts per cell are ${audit.median_counts_per_cell.toLocaleString('en-US')}; median detected genes are ${audit.median_genes_per_cell.toLocaleString('en-US')}. There are no empty cells. The file expands to 7.21 GB and was scanned in read-only 256-cell chunks.`),
+        heading('Metadata and prior processing'),
+        paragraph('Donor, library, disease condition, age, gender, and demultiplexing fields are present and complete. Years of illness is missing for controls. Every cell is labelled SNG, indicating upstream singlet selection. No cell-state labels or stored embeddings are present.'),
+        heading('Review before quality control'),
+        paragraph('Donor contributions range from 869 to 4,591 cells. The input contains 30,676 observations, compared with the published post-QC count of 30,557. Subsequent filtering will be tracked explicitly. The next milestone will inspect mitochondrial fractions and quality distributions before selecting thresholds.'),
+        paragraph('No cells or genes were removed or normalized during this audit. Detailed donor inventories, matrix summaries, provenance, and checksums are available in results/tables and docs/data_audit.md.'),
+    );
+}
 const document = new Document({ creator: 'maghasemi', title: 'Parkinson Disease Neural Single Cell Analysis',
     description: 'Statistical analysis charter and project decisions',
     styles: { default: { document: { run: { font: 'Calibri', size: 22, color: '202A35' } },
@@ -41,7 +59,7 @@ const document = new Document({ creator: 'maghasemi', title: 'Parkinson Disease 
     } },
     sections: [{ properties: { page: { size: { width: 11906, height: 16838 }, margin: { top: 1050, bottom: 1050, left: 1450, right: 1450 } } }, children: [
         new Paragraph({ text: 'Parkinson Disease Neural Single Cell Analysis', heading: HeadingLevel.TITLE }),
-        paragraph('Statistical Analysis Charter | Version 0.1 | 8 November 2026'),
+        paragraph('Statistical Analysis Report | Version 0.2 | 8 November 2026'),
         ...section('Objective'), heading('Questions'), ...sections.get('Questions').split('\n').map(paragraph),
         heading('Study and analysis boundaries'),
         paragraph('GSE176160 contains neural precursor cultures profiled by single-cell RNA sequencing. The published sporadic disease comparison includes 7 patients and 5 controls. Pooled cells were assigned to donors using SNP-based demultiplexing. File-level verification is the first project milestone [1, 2].'),
@@ -58,6 +76,7 @@ const document = new Document({ creator: 'maghasemi', title: 'Parkinson Disease 
         paragraph('[1] Schmidt S, Luecken MD, Trumbach D, et al. Primary cilia and SHH signaling impairments in human and mouse models of Parkinson\'s disease. Nature Communications. 2022;13:4819. doi.org/10.1038/s41467-022-32229-9'),
         paragraph('[2] NCBI Gene Expression Omnibus. GSE176160. www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE176160'),
         paragraph('[3] Squair JW, et al. Confronting false discoveries in single-cell differential expression. Nature Communications. 2021;12:5692. doi.org/10.1038/s41467-021-25960-2'),
+        ...auditPages,
     ] }],
 });
 Packer.toBuffer(document).then(buffer => {

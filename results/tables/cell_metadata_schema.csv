@@ -1,0 +1,8 @@
+column,dtype,n_unique,n_missing
+Demux_state,category,1,0
+Donor,category,12,0
+Lane,category,6,0
+condition,category,2,0
+age,int64,12,0
+years_of_illness,float64,5,11709
+gender,category,2,0
