@@ -1,0 +1,10 @@
+{
+  "accession": "GSE176160",
+  "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE176nnn/GSE176160/suppl/GSE176160_ipsc_ipd_patients_raw.h5ad.gz",
+  "archive": "GSE176160_ipsc_ipd_patients_raw.h5ad.gz",
+  "archive_bytes": 237534119,
+  "archive_sha256": "eb6141b2f4f70aea8b5a79f74b9903babcb9e62916db7a0d7539043913b8182b",
+  "uncompressed_file": "GSE176160_ipsc_ipd_patients_raw.h5ad",
+  "uncompressed_bytes": 7211736132,
+  "uncompressed_sha256": "d229d955c89dc9f975952ccc50e6bbcd6a9ffc245f5a2b6083d0f5858dba3279"
+}

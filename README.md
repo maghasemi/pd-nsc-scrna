@@ -6,7 +6,7 @@ Parkinson's disease neural stem and precursor cell single-cell RNA-seq analysis.
 
 A statistical case study of single-cell RNA sequencing in iPSC-derived human neural precursor cells from sporadic Parkinson's disease and control donors.
 
-**Status:** Project design. Data audit and analysis are pending.
+**Status:** Input audit complete. Quality control and biological analysis are pending.
 
 ## Research question
 
@@ -40,12 +40,23 @@ Which cell-state-specific expression and pathway differences distinguish sporadi
 
 ## Reproducibility
 
-Analysis commands and a locked analysis environment will be added with the first executable analysis milestone. The initial project report can be regenerated with `node scripts/build_project_report.cjs` after installing the exact `docx` version recorded in `docs/report_build.md`.
+Use Python 3.12 and install the locked analysis environment with `uv`.
+
+```bash
+python3.12 -m venv --copies .venv
+uv pip sync requirements.lock --python .venv/bin/python --link-mode copy
+.venv/bin/python scripts/download_data.py
+.venv/bin/python scripts/audit_data.py
+```
+
+The input archive is approximately 238 MB and expands to 7.21 GB. Allow space for both files and the Python environment. The audit reads the dense matrix in chunks and preserves the input. On external filesystems with large allocation units, a Python environment can occupy substantially more disk space than its package payload.
+
+See [the input audit](docs/data_audit.md) for findings and [the donor inventory](results/tables/donor_inventory.csv) for biological replication. Checksums recorded at first acquisition provide a reproducibility baseline; they are not publisher-signed checksums. The initial project report can be regenerated with `node scripts/build_project_report.cjs` after installing the exact `docx` version recorded in `docs/report_build.md`.
 
 ## Milestones
 
 - [x] Define the statistical scope and repository structure.
-- [ ] Audit metadata, donor assignments, and count matrices.
+- [x] Audit metadata, donor assignments, and count matrices.
 - [ ] Document QC and annotation decisions.
 - [ ] Freeze the statistical analysis plan.
 - [ ] Complete differential expression and pathway analyses.

@@ -1,0 +1,43 @@
+{
+  "input_file": "GSE176160_ipsc_ipd_patients_raw.h5ad",
+  "shape": {
+    "n_cells": 30676,
+    "n_genes": 58735
+  },
+  "n_donors": 12,
+  "donors_by_condition": {
+    "Parkinson": 7,
+    "Control": 5
+  },
+  "cells_by_condition": {
+    "Parkinson": 18967,
+    "Control": 11709
+  },
+  "n_lanes": 6,
+  "demultiplexing_labels": {
+    "SNG": 30676
+  },
+  "cell_ids_unique": true,
+  "gene_ids_unique": true,
+  "matrix_storage": "Dataset",
+  "matrix_dtype": "float32",
+  "matrix_min": 0.0,
+  "matrix_max": 7486.0,
+  "all_values_integer_valued": true,
+  "zero_fraction": 0.940383358810532,
+  "median_counts_per_cell": 12357.0,
+  "median_genes_per_cell": 3473.0,
+  "empty_cells": 0,
+  "named_layers": [],
+  "has_raw_slot": false,
+  "unstructured_metadata": [],
+  "embeddings": [],
+  "python_version": "3.12.14",
+  "package_versions": {
+    "anndata": "0.13.4",
+    "numpy": "2.5.4",
+    "pandas": "3.1.1",
+    "h5py": "3.16.0",
+    "scipy": "1.18.1"
+  }
+}
