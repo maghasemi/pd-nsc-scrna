@@ -20,3 +20,7 @@
 | D016 | 2026-11-13 | Run Scrublet separately within each lane using raw counts and automatic thresholds | Lane-specific simulation respects the capture design and complements upstream Demuxlet selection | Completed |
 | D017 | 2026-11-13 | Retain the 13 Scrublet-flagged cells in the primary dataset and exclude them in a sensitivity analysis | The observed and simulated score distributions overlap and the calls are uncertain | Applied |
 | D018 | 2026-11-13 | Preserve raw counts in the filtered H5AD and record lane depth differences | The next stage can assess whether normalization reduces the lane-associated pattern | Applied |
+| D019 | 2026-11-13 | Scale each cell to 10,000 counts and apply log1p | Standardize cell totals for exploratory expression analysis while retaining raw counts for inference | Applied |
+| D020 | 2026-11-13 | Select 2,000 HVGs across pooled lanes after requiring detection in at least three cells | Establish a baseline representation for assessing lane and donor patterns | Applied |
+| D021 | 2026-11-13 | Use centered PCA with ARPACK and retain 50 components | Preserve a range of components for diagnostic review and neighborhood construction | Applied |
+| D022 | 2026-11-13 | Use the uncorrected PCA for initial clustering | Lane overlap on PC1–PC2 and limited donor-adjusted lane contributions support a baseline graph before assessing cluster composition | Accepted |
