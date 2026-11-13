@@ -6,7 +6,7 @@ Parkinson's disease neural stem and precursor cell single-cell RNA-seq analysis.
 
 A statistical case study of single-cell RNA sequencing in iPSC-derived human neural precursor cells from sporadic Parkinson's disease and control donors.
 
-**Status:** Input audit complete. Quality control and biological analysis are pending.
+**Status:** Input audit and cell quality control complete. Normalization and cell-state annotation are next.
 
 ## Research question
 
@@ -16,7 +16,7 @@ Which cell-state-specific expression and pathway differences distinguish sporadi
 
 - Dataset: [GSE176160](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE176160).
 - Primary comparison: sporadic Parkinson's disease versus control in the patient-derived cohort.
-- Published primary cohort: 7 disease and 5 control donors. Actual file contents and retained donor coverage will be audited.
+- Primary cohort: 7 Parkinson's disease donors and 5 controls. All 12 donors are represented after cell filtering.
 - Candidate focus: NSC1a, subject to annotation evidence and donor coverage.
 - Biological replicate: donor. Cells are nested observations.
 - Scope: metadata audit, quality control, cell-state annotation, descriptive composition, differential expression, pathway analysis, and sensitivity analysis.
@@ -40,24 +40,27 @@ Which cell-state-specific expression and pathway differences distinguish sporadi
 
 ## Reproducibility
 
-Use Python 3.12 and install the locked analysis environment with `uv`.
+Use Python 3.12 and install the locked analysis environment with `uv`. On the development Mac, the environment lives on the internal drive to avoid package installation issues on the external SSD.
 
 ```bash
-python3.12 -m venv --copies .venv
-uv pip sync requirements.lock --python .venv/bin/python --link-mode copy
-.venv/bin/python scripts/download_data.py
-.venv/bin/python scripts/audit_data.py
+uv venv --python 3.12 "$HOME/.venvs/pd-nsc-scrna"
+uv pip sync requirements.lock --python "$HOME/.venvs/pd-nsc-scrna/bin/python" --link-mode copy
+"$HOME/.venvs/pd-nsc-scrna/bin/python" scripts/download_data.py
+"$HOME/.venvs/pd-nsc-scrna/bin/python" scripts/audit_data.py
 ```
 
 The input archive is approximately 238 MB and expands to 7.21 GB. Allow space for both files and the Python environment. The audit reads the dense matrix in chunks and preserves the input. On external filesystems with large allocation units, a Python environment can occupy substantially more disk space than its package payload.
 
-See [the input audit](docs/data_audit.md) for findings and [the donor inventory](results/tables/donor_inventory.csv) for biological replication. Checksums recorded at first acquisition provide a reproducibility baseline; they are not publisher-signed checksums. The initial project report can be regenerated with `node scripts/build_project_report.cjs` after installing the exact `docx` version recorded in `docs/report_build.md`.
+Select this environment as the notebook kernel and run [01 Data Inspection](notebooks/01_data_inspection.ipynb) before [02 Quality Control](notebooks/02_quality_control.ipynb). The second notebook writes the filtered count matrix to `data/interim/GSE176160_patients_qc.h5ad`.
+
+See the [input audit](docs/data_audit.md), [QC review](docs/qc_review.md), and [retention table](results/tables/qc_retention_by_condition.csv) for the evidence behind the retained cohort. The primary analysis retains 30,589 cells. The doublet sensitivity analysis retains 30,576 cells. See [Report Build](docs/report_build.md) for the Word report regeneration command.
 
 ## Milestones
 
 - [x] Define the statistical scope and repository structure.
 - [x] Audit metadata, donor assignments, and count matrices.
-- [ ] Document QC and annotation decisions.
+- [x] Document cell QC decisions and write the filtered count matrix.
+- [ ] Normalize counts and annotate cell states.
 - [ ] Freeze the statistical analysis plan.
 - [ ] Complete differential expression and pathway analyses.
 - [ ] Assess sensitivity and deliver the statistical report.

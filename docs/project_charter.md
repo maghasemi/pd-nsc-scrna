@@ -1,6 +1,6 @@
 # Statistical Analysis Charter
 
-Version 0.1 | 8 November 2026 | Project design
+Version 0.2 | 13 November 2026 | Quality control complete
 
 ## Objective
 
@@ -31,3 +31,7 @@ Version 1 covers statistical single-cell analysis. Completion requires an audita
 ## First review gate
 
 Inspect the patient AnnData file. Verify count scale, unique cell identifiers, gene identifiers, donor labels, condition mapping, library labels, prior filtering, and cell-state metadata. Resolve these before executing QC or biological tests.
+
+## Cell quality control
+
+Apply the primary cell filter to the audited counts. Exclude cells with fewer than 1,000 detected genes or at least 15% mitochondrial counts. Run Scrublet independently for each lane and preserve its scores and calls. Use the primary cohort for the main analysis and exclude Scrublet-flagged cells in a sensitivity analysis. Preserve the original count scale in the filtered matrix and audit lane-associated depth during normalization and annotation.
