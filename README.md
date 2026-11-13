@@ -6,7 +6,7 @@ Parkinson's disease neural stem and precursor cell single-cell RNA-seq analysis.
 
 A statistical case study of single-cell RNA sequencing in iPSC-derived human neural precursor cells from sporadic Parkinson's disease and control donors.
 
-**Status:** Input audit and cell quality control complete. Normalization and cell-state annotation are next.
+**Status:** Input audit, cell quality control, and normalization complete. Highly variable gene selection and PCA are next.
 
 ## Research question
 
@@ -19,7 +19,7 @@ Which cell-state-specific expression and pathway differences distinguish sporadi
 - Primary cohort: 7 Parkinson's disease donors and 5 controls. All 12 donors are represented after cell filtering.
 - Candidate focus: NSC1a, subject to annotation evidence and donor coverage.
 - Biological replicate: donor. Cells are nested observations.
-- Scope: metadata audit, quality control, cell-state annotation, descriptive composition, differential expression, pathway analysis, and sensitivity analysis.
+- Scope: metadata audit, quality control, normalization, cell-state annotation, descriptive composition, differential expression, pathway analysis, and sensitivity analysis.
 
 ## Project layout
 
@@ -51,16 +51,24 @@ uv pip sync requirements.lock --python "$HOME/.venvs/pd-nsc-scrna/bin/python" --
 
 The input archive is approximately 238 MB and expands to 7.21 GB. Allow space for both files and the Python environment. The audit reads the dense matrix in chunks and preserves the input. On external filesystems with large allocation units, a Python environment can occupy substantially more disk space than its package payload.
 
-Select this environment as the notebook kernel and run [01 Data Inspection](notebooks/01_data_inspection.ipynb) before [02 Quality Control](notebooks/02_quality_control.ipynb). The second notebook writes the filtered count matrix to `data/interim/GSE176160_patients_qc.h5ad`.
+Select this environment as the notebook kernel and run the notebooks in order.
+
+1. [01 Data Inspection](notebooks/01_data_inspection.ipynb) audits the input and summarizes cell quality metrics.
+2. [02 Quality Control](notebooks/02_quality_control.ipynb) writes the filtered raw counts to `data/interim/GSE176160_patients_qc.h5ad` for count-based statistical analyses.
+3. [03 Normalization](notebooks/03_normalization.ipynb) scales each cell to 10,000 counts and applies `log1p`. It writes the expression matrix for PCA to `data/interim/GSE176160_patients_normalized.h5ad`.
 
 See the [input audit](docs/data_audit.md), [QC review](docs/qc_review.md), and [retention table](results/tables/qc_retention_by_condition.csv) for the evidence behind the retained cohort. The primary analysis retains 30,589 cells. The doublet sensitivity analysis retains 30,576 cells. See [Report Build](docs/report_build.md) for the Word report regeneration command.
+
+Before `log1p`, the median scaled total was approximately 10,000 in each of the six lanes. PCA will assess residual differences in expression profiles across lanes. See the [normalization summary by lane](results/tables/normalization_by_lane.csv).
 
 ## Milestones
 
 - [x] Define the statistical scope and repository structure.
 - [x] Audit metadata, donor assignments, and count matrices.
 - [x] Document cell QC decisions and write the filtered count matrix.
-- [ ] Normalize counts and annotate cell states.
+- [x] Normalize counts and verify scaling by lane.
+- [ ] Select highly variable genes and assess lane-associated variation with PCA.
+- [ ] Annotate cell states.
 - [ ] Freeze the statistical analysis plan.
 - [ ] Complete differential expression and pathway analyses.
 - [ ] Assess sensitivity and deliver the statistical report.
