@@ -89,6 +89,33 @@ if (fs.existsSync(retentionPath)) {
         );
     }
 }
+const pcaPages = [];
+const pcaDiagnosticsPath = path.join(projectRoot, 'results/tables/pca_variance_and_lane.csv');
+if (fs.existsSync(pcaDiagnosticsPath)) {
+    pcaPages.push(
+        pageBreak(), heading('Normalization and principal component analysis'),
+        ...sections.get('Normalization and PCA').split('\n\n').map(paragraph),
+        paragraph('All six lanes had median scaled totals of approximately 10,000 before log transformation. The detection criterion retained 32,801 of 58,735 genes for feature selection. PCA used 2,000 selected genes from all 30,589 cells. PC1 explained 10.14% of the variance and the first 10 components explained 38.84%.'),
+        heading('Lane and donor patterns'),
+        paragraph('Lane colors overlapped on PC1 and PC2. In a descriptive comparison of nested models, adding lane after donor explained at most 2.09% of the remaining variance, in PC37. That component accounted for 0.28% of the variance in the selected expression matrix.'),
+        paragraph('Two control donors contributed 3,016 of the 6,118 cells in the lowest PC2 quintile. Within each of these donors, the pattern recurred across all six lanes. LUM and LGALS1 had negative PC2 loadings, while FABP7 had a positive loading. The marker pattern informs the subsequent annotation of cell states.'),
+    );
+
+    const figurePath = path.join(projectRoot, 'results/figures/pca_explained_variance.png');
+    if (fs.existsSync(figurePath)) {
+        pcaPages.push(
+            new Paragraph({
+                children: [new ImageRun({
+                    type: 'png',
+                    data: fs.readFileSync(figurePath),
+                    transformation: { width: 575, height: 205 },
+                })],
+                spacing: { before: 160, after: 160 },
+            }),
+            paragraph('Figure 2. Variance explained by each principal component and cumulative variance across the 50 components.'),
+        );
+    }
+}
 const document = new Document({ creator: 'maghasemi', title: 'Parkinson Disease Neural Single Cell Analysis',
     description: 'Statistical analysis charter and project decisions',
     styles: { default: { document: { run: { font: 'Calibri', size: 22, color: '202A35' } },
@@ -97,7 +124,7 @@ const document = new Document({ creator: 'maghasemi', title: 'Parkinson Disease 
     } },
     sections: [{ properties: { page: { size: { width: 11906, height: 16838 }, margin: { top: 1050, bottom: 1050, left: 1450, right: 1450 } } }, children: [
         new Paragraph({ text: 'Parkinson Disease Neural Single Cell Analysis', heading: HeadingLevel.TITLE }),
-        paragraph('Statistical Analysis Report | Version 0.3 | 13 November 2026'),
+        paragraph('Statistical Analysis Report | Version 0.4 | 13 November 2026'),
         ...section('Objective'), heading('Questions'), ...sections.get('Questions').split('\n').map(paragraph),
         heading('Study and analysis boundaries'),
         paragraph('GSE176160 contains neural precursor cultures profiled by single-cell RNA sequencing. The published sporadic disease comparison includes 7 patients and 5 controls. Pooled cells were assigned to donors using SNP-based demultiplexing. File-level verification is the first project milestone [1, 2].'),
@@ -117,6 +144,7 @@ const document = new Document({ creator: 'maghasemi', title: 'Parkinson Disease 
         paragraph('[4] Wolock SL, Lopez R, Klein AM. Scrublet: Computational Identification of Cell Doublets in Single-Cell Transcriptomic Data. Cell Systems. 2019;8(4):281–291.e9. doi.org/10.1016/j.cels.2018.11.005'),
         ...auditPages,
         ...qcPages,
+        ...pcaPages,
     ] }],
 });
 Packer.toBuffer(document).then(buffer => {

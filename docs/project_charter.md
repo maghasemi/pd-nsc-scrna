@@ -1,6 +1,6 @@
 # Statistical Analysis Charter
 
-Version 0.2 | 13 November 2026 | Quality control complete
+Version 0.3 | 13 November 2026 | Quality control and PCA complete
 
 ## Objective
 
@@ -35,3 +35,7 @@ Inspect the patient AnnData file. Verify count scale, unique cell identifiers, g
 ## Cell quality control
 
 Apply the primary cell filter to the audited counts. Exclude cells with fewer than 1,000 detected genes or at least 15% mitochondrial counts. Run Scrublet independently for each lane and preserve its scores and calls. Use the primary cohort for the main analysis and exclude Scrublet-flagged cells in a sensitivity analysis. Preserve the original count scale in the filtered matrix and audit lane-associated depth during normalization and annotation.
+
+## Normalization and PCA
+
+Scale each cell to 10,000 counts and apply log1p for exploratory expression analysis. Restrict HVG eligibility to genes detected in at least three cells. Select 2,000 HVGs across pooled lanes using Seurat dispersion and compute 50 centered PCs using ARPACK. Preserve raw counts for count-based inference. Use the uncorrected PCA for the first neighborhood graph and assess the representation of donors and lanes across clusters.

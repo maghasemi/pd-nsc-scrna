@@ -6,7 +6,7 @@ Parkinson's disease neural stem and precursor cell single-cell RNA-seq analysis.
 
 A statistical case study of single-cell RNA sequencing in iPSC-derived human neural precursor cells from sporadic Parkinson's disease and control donors.
 
-**Status:** Input audit, cell quality control, and normalization complete. Highly variable gene selection and PCA are next.
+**Status:** Input audit, cell quality control, normalization, and PCA complete. Neighborhood graph construction and clustering are next.
 
 ## Research question
 
@@ -56,10 +56,13 @@ Select this environment as the notebook kernel and run the notebooks in order.
 1. [01 Data Inspection](notebooks/01_data_inspection.ipynb) audits the input and summarizes cell quality metrics.
 2. [02 Quality Control](notebooks/02_quality_control.ipynb) writes the filtered raw counts to `data/interim/GSE176160_patients_qc.h5ad` for count-based statistical analyses.
 3. [03 Normalization](notebooks/03_normalization.ipynb) scales each cell to 10,000 counts and applies `log1p`. It writes the expression matrix for PCA to `data/interim/GSE176160_patients_normalized.h5ad`.
+4. [04 HVG Selection and PCA](notebooks/04_hvg_pca.ipynb) selects 2,000 highly variable genes and computes 50 PCs. It writes the expression matrix and PCA coordinates to `data/interim/GSE176160_patients_pca.h5ad`.
 
 See the [input audit](docs/data_audit.md), [QC review](docs/qc_review.md), and [retention table](results/tables/qc_retention_by_condition.csv) for the evidence behind the retained cohort. The primary analysis retains 30,589 cells. The doublet sensitivity analysis retains 30,576 cells. See [Report Build](docs/report_build.md) for the Word report regeneration command.
 
-Before `log1p`, the median scaled total was approximately 10,000 in each of the six lanes. PCA will assess residual differences in expression profiles across lanes. See the [normalization summary by lane](results/tables/normalization_by_lane.csv).
+Before `log1p`, the median scaled total was approximately 10,000 in each of the six lanes. See the [normalization summary by lane](results/tables/normalization_by_lane.csv).
+
+The first 10 PCs explain 38.84% of the variance among the 2,000 selected genes. The six lanes overlap visually on PC1 and PC2. After accounting for donor, the largest lane contribution was 2.09% of the remaining variance in PC37. Two control donors account for 49.3% of cells in the lowest PC2 quintile. See the [PCA diagnostics](results/tables/pca_variance_and_lane.csv) and the [PCA plots by lane, donor, and condition](results/figures/pca_by_lane_donor_condition.png).
 
 ## Milestones
 
@@ -67,7 +70,8 @@ Before `log1p`, the median scaled total was approximately 10,000 in each of the 
 - [x] Audit metadata, donor assignments, and count matrices.
 - [x] Document cell QC decisions and write the filtered count matrix.
 - [x] Normalize counts and verify scaling by lane.
-- [ ] Select highly variable genes and assess lane-associated variation with PCA.
+- [x] Select highly variable genes and assess lane-associated variation with PCA.
+- [ ] Construct the neighborhood graph and assess cluster composition.
 - [ ] Annotate cell states.
 - [ ] Freeze the statistical analysis plan.
 - [ ] Complete differential expression and pathway analyses.
