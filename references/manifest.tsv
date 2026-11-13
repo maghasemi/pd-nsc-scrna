@@ -1,3 +1,4 @@
 id	local_path	source_url	download_date	sha256	license
 schmidt2022cilia	papers/schmidt_2022_primary_cilia.pdf	https://www.nature.com/articles/s41467-022-32229-9.pdf	2026-11-08	0ad1abe925e97c7522f2879bcf59462d697ad00c56a1a5c9a0c5ccec04800218	CC-BY-4.0
 squair2021false	papers/squair_2021_false_discoveries.pdf	https://www.nature.com/articles/s41467-021-25960-2.pdf	2026-11-08	465fd1842f2e07e17d55e0170dd96dd994f61a15c019655f3f1503ef37e7f22a	CC-BY-4.0
+wolock2018scrublet-preprint	papers/wolock_2018_scrublet_preprint.pdf	https://www.biorxiv.org/content/10.1101/357368v1.full.pdf	2026-11-13	72e4d372fd09b7acf41313a25497a66dc074e9e5193e4ed627a8f3822ac4ba69	CC-BY-4.0

@@ -1,0 +1,13 @@
+Donor,condition,n_cells,n_preliminary_flags,n_scrublet_flags,n_combined_flags
+UKERi1E4-R1-003,Control,3449,3,5,8
+UKERi1JF-R1-018,Control,1396,2,0,2
+UKERi82A-R1-002,Control,869,12,0,12
+UKERi88H-R1-002,Parkinson,3288,9,2,11
+UKERiAY6-R1-003,Parkinson,2997,12,0,12
+UKERiC99-R1-007,Parkinson,4591,4,3,7
+UKERiG3G-R1-039,Control,3246,9,0,9
+UKERiJ2C-R1-015,Parkinson,2191,20,0,20
+UKERiM89-R1-005,Parkinson,1042,8,0,8
+UKERiO3H-R1-005,Control,2749,3,0,3
+UKERiPX7-R1-001,Parkinson,2159,2,0,2
+UKERiR66-R1-007,Parkinson,2699,3,3,6
