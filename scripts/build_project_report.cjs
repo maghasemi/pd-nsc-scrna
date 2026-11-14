@@ -116,6 +116,43 @@ if (fs.existsSync(pcaDiagnosticsPath)) {
         );
     }
 }
+const clusteringPages = [];
+const resolutionPath = path.join(projectRoot, 'results/tables/cluster_resolution_summary.csv');
+if (fs.existsSync(resolutionPath)) {
+    const resolutionRows = fs.readFileSync(resolutionPath, 'utf8').trim().split(/\r?\n/).slice(1)
+        .map(line => {
+            const [resolution, clusters, flaggedClusters, flaggedCells, flaggedPercent] = line.split(',');
+            return [resolution, clusters, flaggedClusters, Number(flaggedCells).toLocaleString('en-US'), `${Number(flaggedPercent).toFixed(2)}%`];
+        });
+    clusteringPages.push(
+        pageBreak(),
+        ...section('Neighborhood graph and clustering'),
+        heading('Resolution sensitivity'),
+        paragraph('The graph contained one connected component. At resolution 0.5, Leiden assigned 30,589 cells to 17 clusters. The table shows how many clusters met the 90% top-donor threshold and the share of all cells assigned to them.'),
+        reportTable(
+            [['Resolution', 'Clusters', 'Clusters meeting threshold', 'Cells in those clusters', 'Share of all cells'], ...resolutionRows],
+            [1350, 1000, 2400, 2350, 1900],
+        ),
+        heading('Donor and lane composition'),
+        paragraph('At resolution 0.5, the six clusters meeting the threshold were represented across all six lanes of their leading donors. For example, cluster 14 captured 90.0% to 96.0% of its leading donor’s cells in each lane. Clusters 14 and 6 had at least 96.7% overlap in both directions with their best matches at both comparison resolutions.'),
+        paragraph('The UMAP shows regions dominated by individual donors, including in the condition panel. Evidence for disease-associated differences will require comparisons across donors within annotated cell states.'),
+    );
+    const figurePath = path.join(projectRoot, 'results/figures/umap_cluster_donor_lane_condition.png');
+    if (fs.existsSync(figurePath)) {
+        clusteringPages.push(
+            pageBreak(), heading('UMAP by cluster donor lane and condition'),
+            new Paragraph({
+                children: [new ImageRun({
+                    type: 'png',
+                    data: fs.readFileSync(figurePath),
+                    transformation: { width: 575, height: 293 },
+                })],
+                spacing: { after: 160 },
+            }),
+            paragraph('Figure 3. The same embedding is colored by reference Leiden cluster, donor, lane, and condition. Each point represents one cell. Cluster labels are provisional pending marker review.'),
+        );
+    }
+}
 const document = new Document({ creator: 'maghasemi', title: 'Parkinson Disease Neural Single Cell Analysis',
     description: 'Statistical analysis charter and project decisions',
     styles: { default: { document: { run: { font: 'Calibri', size: 22, color: '202A35' } },
@@ -124,7 +161,7 @@ const document = new Document({ creator: 'maghasemi', title: 'Parkinson Disease 
     } },
     sections: [{ properties: { page: { size: { width: 11906, height: 16838 }, margin: { top: 1050, bottom: 1050, left: 1450, right: 1450 } } }, children: [
         new Paragraph({ text: 'Parkinson Disease Neural Single Cell Analysis', heading: HeadingLevel.TITLE }),
-        paragraph('Statistical Analysis Report | Version 0.4 | 13 November 2026'),
+        paragraph('Statistical Analysis Report | Version 0.5 | 14 November 2026'),
         ...section('Objective'), heading('Questions'), ...sections.get('Questions').split('\n').map(paragraph),
         heading('Study and analysis boundaries'),
         paragraph('GSE176160 contains neural precursor cultures profiled by single-cell RNA sequencing. The published sporadic disease comparison includes 7 patients and 5 controls. Pooled cells were assigned to donors using SNP-based demultiplexing. File-level verification is the first project milestone [1, 2].'),
@@ -145,6 +182,7 @@ const document = new Document({ creator: 'maghasemi', title: 'Parkinson Disease 
         ...auditPages,
         ...qcPages,
         ...pcaPages,
+        ...clusteringPages,
     ] }],
 });
 Packer.toBuffer(document).then(buffer => {
