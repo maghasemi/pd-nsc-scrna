@@ -1,0 +1,10 @@
+provisional_cell_state,n_cells,control_n_cells,control_n_donors_ge_20,parkinson_n_cells,parkinson_n_donors_ge_20
+Cycling NSC1-like,7085,971,4,6114,7
+NSC1-like,6595,4612,4,1983,6
+Neural crest-like,4891,2754,2,2137,7
+NSC2-like,4846,2259,5,2587,6
+NSC-like (mixed marker profile),2173,35,0,2138,4
+Unresolved,1797,540,5,1257,7
+Cycling NSC2-like,1681,260,3,1421,7
+Glial precursor-like,956,139,2,817,6
+Immature neuron-like,565,110,3,455,6

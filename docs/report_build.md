@@ -1,6 +1,6 @@
 # Report Build
 
-The report builder reads the project charter for the research questions, statistical plan, sensitivity assessment, and completion criteria. It includes the audit summary, QC retention table, Scrublet diagnostics, PCA, and clustering results when the corresponding outputs are available.
+The report builder reads the project charter for the research questions, statistical plan, sensitivity assessment, and completion criteria. It includes the audit summary, QC retention, Scrublet diagnostics, PCA, clustering, and cell-state annotation when the corresponding outputs are available.
 
 Use Node.js 24 and `docx` 9.6.1. Install the dependency locally with `npm install --no-save --package-lock=false docx@9.6.1`, then run `node scripts/build_project_report.cjs` from the project root. The generated file is `docs/project_report.docx`.
 

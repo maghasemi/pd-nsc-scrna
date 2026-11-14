@@ -6,7 +6,7 @@ Parkinson's disease neural stem and precursor cell single-cell RNA-seq analysis.
 
 A statistical case study of single-cell RNA sequencing in iPSC-derived human neural precursor cells from sporadic Parkinson's disease and control donors.
 
-**Status:** Clustering and donor composition review complete. Cell-state annotation is next.
+**Status:** Provisional cell-state annotation and donor coverage review complete. The statistical analysis plan is next.
 
 ## Research question
 
@@ -17,7 +17,7 @@ Which cell-state-specific expression and pathway differences distinguish sporadi
 - Dataset: [GSE176160](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE176160).
 - Primary comparison: sporadic Parkinson's disease versus control in the patient-derived cohort.
 - Primary cohort: 7 Parkinson's disease donors and 5 controls. All 12 donors are represented after cell filtering.
-- Candidate focus: NSC1a, subject to annotation evidence and donor coverage.
+- Candidate focus: the NSC1-like state, informed by the published NSC1a markers. The contrast and donor eligibility criteria are pending.
 - Biological replicate: donor. Cells are nested observations.
 - Scope: metadata audit, quality control, normalization, cell-state annotation, descriptive composition, differential expression, pathway analysis, and sensitivity analysis.
 
@@ -58,6 +58,7 @@ Select this environment as the notebook kernel and run the notebooks in order.
 3. [03 Normalization](notebooks/03_normalization.ipynb) scales each cell to 10,000 counts and applies `log1p`. It writes the expression matrix for PCA to `data/interim/GSE176160_patients_normalized.h5ad`.
 4. [04 HVG Selection and PCA](notebooks/04_hvg_pca.ipynb) selects 2,000 highly variable genes and computes 50 PCs. It writes the expression matrix and PCA coordinates to `data/interim/GSE176160_patients_pca.h5ad`.
 5. [05 Clustering](notebooks/05_clustering.ipynb) builds a neighborhood graph, compares three Leiden resolutions, and writes the graph, UMAP coordinates, and cluster labels to `data/interim/GSE176160_patients_clustered.h5ad`.
+6. [06 Cell State Annotation](notebooks/06_cell_state_annotation.ipynb) reviews cluster markers by donor and writes provisional labels and UMAP coordinates alongside log-normalized expression to `data/interim/GSE176160_patients_annotated.h5ad`.
 
 See the [input audit](docs/data_audit.md), [QC review](docs/qc_review.md), and [retention table](results/tables/qc_retention_by_condition.csv) for the evidence behind the retained cohort. The primary analysis retains 30,589 cells. The doublet sensitivity analysis retains 30,576 cells. See [Report Build](docs/report_build.md) for the Word report regeneration command.
 
@@ -71,6 +72,12 @@ Leiden found 17 clusters at the reference resolution of 0.5. Six clusters each d
 
 ![UMAP colored by reference Leiden cluster, donor, lane, and condition](results/figures/umap_cluster_donor_lane_condition.png)
 
+## Cell-state annotation
+
+Marker expression supported eight provisional cell-state labels across 15 of the 17 clusters. Clusters 11 and 12 remain unresolved (1,797 cells). The NSC1-like label covers 6,595 cells in clusters 2, 5, and 10. At the descriptive cutoff of 20 cells per donor, it has coverage from four controls and six Parkinson's disease donors, including after excluding cluster 10. The leading control donor's share rises from 60.5% to 86.0% in that sensitivity subset. See the [cluster annotations](results/tables/cluster_annotation_review_r05.csv), [donor coverage](results/tables/cell_state_donor_coverage.csv), and [NSC1-like sensitivity counts](results/tables/nsc1_like_coverage_sensitivity.csv).
+
+[View the cell-state marker dot plot](results/figures/cell_state_markers_by_cluster.png)
+
 ## Milestones
 
 - [x] Define the statistical scope and repository structure.
@@ -79,7 +86,7 @@ Leiden found 17 clusters at the reference resolution of 0.5. Six clusters each d
 - [x] Normalize counts and verify scaling by lane.
 - [x] Select highly variable genes and assess lane-associated variation with PCA.
 - [x] Construct the neighborhood graph and assess cluster composition.
-- [ ] Annotate cell states.
+- [x] Assign provisional cell-state labels and review donor coverage.
 - [ ] Freeze the statistical analysis plan.
 - [ ] Complete differential expression and pathway analyses.
 - [ ] Assess sensitivity and deliver the statistical report.

@@ -1,6 +1,6 @@
 # Statistical Analysis Charter
 
-Version 0.4 | 14 November 2026 | Clustering and donor composition review complete
+Version 0.5 | 14 November 2026 | Provisional cell-state annotation complete
 
 ## Objective
 
@@ -18,7 +18,7 @@ Audit counts and metadata before choosing thresholds. Preserve original counts a
 
 Use donor-by-state pseudobulk counts with an edgeR quasi-likelihood model as the initial differential expression strategy. Its role is one inferential component of the single-cell project. Confirm adequate donor representation, model identifiability, and residual degrees of freedom before fitting. Additional covariates require metadata support and a full-rank design. Do not include donor identity as a fixed effect alongside condition in an unpaired donor-level comparison.
 
-Use BH-adjusted p-values at FDR < 0.05 for the primary contrast in the selected state, with effect sizes and expression prevalence reported. Define the primary state and contrasts before disease differential expression. Additional states are secondary analyses with their multiple-testing family documented. Use ranked enrichment with versioned gene sets and a recorded tested-gene background for any overrepresentation analysis.
+Use BH-adjusted p-values at FDR < 0.05 for the primary contrast in the selected state, with effect sizes and expression prevalence reported. Define the primary state and contrasts before disease differential expression. NSC1-like is the candidate state based on the published NSC1a marker profile and observed donor coverage. Additional states are secondary analyses with their multiple-testing family documented. Use ranked enrichment with versioned gene sets and a recorded tested-gene background for any overrepresentation analysis.
 
 ## Interpretation and sensitivity
 
@@ -45,3 +45,9 @@ Scale each cell to 10,000 counts and apply log1p for exploratory expression anal
 Build a graph from the first 30 uncorrected PCs with a neighborhood size of 15, exact Euclidean search via scikit-learn, and UMAP connectivity weights. Use weighted, undirected Leiden with igraph, two iterations, and seed 0. Use resolution 0.5 as the reference and compare membership at 0.3 and 0.8 on the same graph. Compute a two-dimensional UMAP with minimum distance 0.5 and seed 0 for visualization.
 
 Use a 90% top-donor share as a descriptive threshold. Compare this share with the donor's contribution to the full dataset. Within each flagged cluster's leading donor, calculate the fraction of cells in the cluster separately for each lane. Interpret the resulting groups using marker expression and donor coverage before assigning biological labels.
+
+## Provisional cell state annotation
+
+Match reference Leiden labels to the full log-normalized expression matrix by ordered cell identifiers. Rank genes for each cluster against the remaining cells using Welch t scores on the 32,801 genes detected in at least three cells. Retain 30 candidates per cluster. Use the ranking as an exploratory screen for annotation.
+
+Review panels informed by Schmidt et al. alongside donor-level detection frequencies and cell-cycle markers. For selected comparisons, use the same donors with at least 20 cells in each cluster. Keep clusters with ambiguous marker evidence unresolved. Assess cell-state coverage by condition and donor, including the NSC1-like subset excluding cluster 10. Define eligibility for donor-level differential expression in the statistical analysis plan.
