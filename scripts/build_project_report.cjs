@@ -153,6 +153,42 @@ if (fs.existsSync(resolutionPath)) {
         );
     }
 }
+const annotationPages = [];
+const coveragePath = path.join(projectRoot, 'results/tables/cell_state_donor_coverage.csv');
+if (fs.existsSync(coveragePath)) {
+    const coverageRows = fs.readFileSync(coveragePath, 'utf8').trim().split(/\r?\n/).slice(1)
+        .map(line => {
+            const [state, cells, , controlDonors, , parkinsonDonors] = line.split(',');
+            return [state, Number(cells).toLocaleString('en-US'), controlDonors, parkinsonDonors];
+        });
+    annotationPages.push(
+        pageBreak(),
+        ...section('Provisional cell state annotation'),
+        heading('Donor coverage by state'),
+        paragraph('Eight provisional cell-state labels cover 15 of the 17 clusters. The remaining 1,797 cells in clusters 11 and 12 are unresolved. Donor counts in the table include individuals with at least 20 cells in that state.'),
+        reportTable(
+            [['Provisional label', 'Cells', 'Control donors', 'Parkinson donors'], ...coverageRows],
+            [4500, 950, 1700, 1850],
+        ),
+    );
+    const figurePath = path.join(projectRoot, 'results/figures/cell_state_markers_by_cluster.png');
+    if (fs.existsSync(figurePath)) {
+        annotationPages.push(
+            pageBreak(), heading('Markers and annotation sensitivity'),
+            new Paragraph({
+                children: [new ImageRun({
+                    type: 'png',
+                    data: fs.readFileSync(figurePath),
+                    transformation: { width: 575, height: 358 },
+                })],
+                spacing: { after: 160 },
+            }),
+            paragraph('Figure 4. Points show the fraction of cells with detected expression and the mean log-normalized expression for each gene and reference cluster.'),
+            paragraph('CENPF, AURKB, and CDC20 were detected in a larger fraction of cells in clusters 4 and 9 than in cluster 2 for all seven matched donors. All five cell-cycle markers in the panel showed higher detection in cluster 7 than in cluster 8 for all nine matched donors. These comparisons support the cycling NSC1-like and NSC2-like labels, respectively.'),
+            paragraph('The NSC1-like group contains 6,595 cells across clusters 2, 5, and 10. Excluding cluster 10 reduces its control cells from 4,612 to 1,830 and its Parkinson cells from 1,983 to 1,958. The number of donors with at least 20 cells remains four controls and six Parkinson donors. A different control donor then contributes 86.0% of the remaining control cells, compared with a leading share of 60.5% before exclusion.'),
+        );
+    }
+}
 const document = new Document({ creator: 'maghasemi', title: 'Parkinson Disease Neural Single Cell Analysis',
     description: 'Statistical analysis charter and project decisions',
     styles: { default: { document: { run: { font: 'Calibri', size: 22, color: '202A35' } },
@@ -161,7 +197,7 @@ const document = new Document({ creator: 'maghasemi', title: 'Parkinson Disease 
     } },
     sections: [{ properties: { page: { size: { width: 11906, height: 16838 }, margin: { top: 1050, bottom: 1050, left: 1450, right: 1450 } } }, children: [
         new Paragraph({ text: 'Parkinson Disease Neural Single Cell Analysis', heading: HeadingLevel.TITLE }),
-        paragraph('Statistical Analysis Report | Version 0.5 | 14 November 2026'),
+        paragraph('Statistical Analysis Report | Version 0.6 | 14 November 2026'),
         ...section('Objective'), heading('Questions'), ...sections.get('Questions').split('\n').map(paragraph),
         heading('Study and analysis boundaries'),
         paragraph('GSE176160 contains neural precursor cultures profiled by single-cell RNA sequencing. The published sporadic disease comparison includes 7 patients and 5 controls. Pooled cells were assigned to donors using SNP-based demultiplexing. File-level verification is the first project milestone [1, 2].'),
@@ -172,7 +208,7 @@ const document = new Document({ creator: 'maghasemi', title: 'Parkinson Disease 
         heading('Analysis milestones'), reportTable(rows, [1700, 7300]),
         pageBreak(), heading('Decision record'),
         paragraph('The current scope covers statistical single-cell analysis. Repository prose, code identifiers, figure text, and reports use English. Technical instruction is maintained in the project conversation. Concise comments explain intent where needed.'),
-        paragraph('Donor is the biological replicate. NSC1a remains a candidate focus until annotation and donor coverage are verified. The differential expression method remains provisional until the count matrix and statistical design have been audited.'),
+        paragraph('Donor is the biological replicate. The NSC1-like group is the candidate for the primary contrast. Donor eligibility and the differential expression model will be finalized in the statistical analysis plan.'),
         paragraph('The project repository is pd-nsc-scrna. The owner selected a private repository for development and review before a future public release. Downloaded reference PDFs remain local; their citations, source URLs, and checksums are versioned.'),
         ...section('First review gate'), heading('References'),
         paragraph('[1] Schmidt S, Luecken MD, Trumbach D, et al. Primary cilia and SHH signaling impairments in human and mouse models of Parkinson\'s disease. Nature Communications. 2022;13:4819. doi.org/10.1038/s41467-022-32229-9'),
@@ -183,6 +219,7 @@ const document = new Document({ creator: 'maghasemi', title: 'Parkinson Disease 
         ...qcPages,
         ...pcaPages,
         ...clusteringPages,
+        ...annotationPages,
     ] }],
 });
 Packer.toBuffer(document).then(buffer => {
