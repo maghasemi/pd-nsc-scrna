@@ -1,6 +1,6 @@
 # Statistical Analysis Charter
 
-Version 0.3 | 13 November 2026 | Quality control and PCA complete
+Version 0.4 | 14 November 2026 | Clustering and donor composition review complete
 
 ## Objective
 
@@ -39,3 +39,9 @@ Apply the primary cell filter to the audited counts. Exclude cells with fewer th
 ## Normalization and PCA
 
 Scale each cell to 10,000 counts and apply log1p for exploratory expression analysis. Restrict HVG eligibility to genes detected in at least three cells. Select 2,000 HVGs across pooled lanes using Seurat dispersion and compute 50 centered PCs using ARPACK. Preserve raw counts for count-based inference. Use the uncorrected PCA for the first neighborhood graph and assess the representation of donors and lanes across clusters.
+
+## Neighborhood graph and clustering
+
+Build a graph from the first 30 uncorrected PCs with a neighborhood size of 15, exact Euclidean search via scikit-learn, and UMAP connectivity weights. Use weighted, undirected Leiden with igraph, two iterations, and seed 0. Use resolution 0.5 as the reference and compare membership at 0.3 and 0.8 on the same graph. Compute a two-dimensional UMAP with minimum distance 0.5 and seed 0 for visualization.
+
+Use a 90% top-donor share as a descriptive threshold. Compare this share with the donor's contribution to the full dataset. Within each flagged cluster's leading donor, calculate the fraction of cells in the cluster separately for each lane. Interpret the resulting groups using marker expression and donor coverage before assigning biological labels.
